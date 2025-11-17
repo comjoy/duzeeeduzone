@@ -32,7 +32,10 @@
   <div class="registration-wrapper">
     <div class="registration-card">
       <a href="index.php" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #ffffffff; font-weight: 500; background: rgba(231, 198, 9, 0.98); padding: 8px 14px; border-radius: 8px; transition: 0.3s;">
-        <i class="fa fa-arrow-left"></i> Back to Dashboard
+        <i class="fa fa-arrow-left"></i> Home
+      </a>
+            <a href="user_login.php" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #ffffffff; font-weight: 500; background: rgba(231, 198, 9, 0.98); padding: 8px 14px; border-radius: 8px; transition: 0.3s;">
+        <i class="fa fa-arrow-left"></i> Login
       </a>
       <br><br>
        <h2 class="title"><i class="fa-solid fa-users-line"></i> Dujee Eduzone </h2>

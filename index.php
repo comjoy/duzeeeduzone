@@ -160,7 +160,7 @@ src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit
             </div>
             <div class="col-lg-6 align-self-end">
               <div class="hero-image wow fadeInUp" data-wow-delay=".5s">
-                <img src="assets/img/hero/hero-5/hero-img.svg" alt="">
+                <img src="assets/img/hero/hero-5/hero-img-two.svg" alt="">
               </div>
             </div>
           </div>
@@ -338,9 +338,9 @@ To create a transparent, rewarding, and growth-driven network where every member
                     <div class="icon">
                       <i class="lni lni-phone"></i>
                     </div>
-                    <div class="text">
+                    <div class="text">     
                       <p>09779811805734</p>
-                      <p>0977984721193</p>
+                      <p>09779847211939</p>
                       <p>09779861049954</p>
                       <p>09779842291520</p>
                       <p>09779807195772</p>
@@ -517,7 +517,7 @@ To create a transparent, rewarding, and growth-driven network where every member
                 <h6>Find Services</h6>
                 <ul class="links">
                   <li> <a href="registration_users.php">Registration</a> </li>
-                  <li> <a href="#0">Login</a> </li>
+                  <li> <a href="user_login.php">Login</a> </li>
                   <li> <a href="#0">Admin Contact</a> </li>
                 </ul>
               </div>

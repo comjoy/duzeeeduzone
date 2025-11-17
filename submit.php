@@ -116,7 +116,7 @@ $stmt->bind_param(
     $hashed_password,
     $country,
     $blood_group,
-    $status,
+    $status
 );
 
 if ($stmt->execute()) {

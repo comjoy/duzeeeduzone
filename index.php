@@ -252,12 +252,13 @@ src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit
                 </li>
                 <li class="wow fadeInUp" data-wow-delay=".4s">
                   <i class="lni lni-checkmark-circle"></i>
-                 We are more than a company — we are a community, where every member uplifts one another, celebrates success, and grows together. By joining us, you become part of a powerful network that believes in teamwork, innovation, and lifelong prosperity.
+                 We are more than a company — we are a community, where every member uplifts one another, celebrates success, and grows together. 
+                 By joining us, you become part of a powerful community that believes in teamwork, innovation, and lifelong prosperity.
                 </li>
                 <li class="wow fadeInUp" data-wow-delay=".45s">
                   <i class="lni lni-checkmark-circle"></i>
                  Our mission is simple:
-To create a transparent, rewarding, and growth-driven network where every member succeeds.
+To create a transparent, rewarding, and growth-driven community where every member succeeds.
                 </li>
               </ul>
              

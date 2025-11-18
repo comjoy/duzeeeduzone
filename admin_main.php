@@ -92,7 +92,7 @@ $mysqli->close();
     <a href="member_search.php">➤ View Table</a>
     <a href="view_tree.php">➤ View Tree</a>
 </div>
-
+      <a href="forgot_password.php"><i class="bi bi-box-arrow-right"></i> Reset Password</a>
       <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </div>
     <div class="col-md-10 p-4">

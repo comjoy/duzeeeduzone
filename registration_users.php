@@ -25,7 +25,39 @@
     .strength-weak { color: #e74c3c; }
     .strength-medium { color: #f39c12; }
     .strength-strong { color: #27ae60; }
-  </style>
+ 
+ .phone-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.phone-country,
+.phone-input {
+    padding: 12px 15px;
+    border: 2px solid #e1e5ee;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    transition: all 0.3s;
+}
+
+.phone-country {
+    width: 45%;
+}
+
+.phone-input {
+    width: 55%;
+}
+
+.phone-country:focus,
+.phone-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+ 
+ </style>
 </head>
 
 <body>
@@ -56,12 +88,32 @@
           <small class="error-msg">Please enter your full name</small>
         </div>
 
-        <!-- Phone Field -->
-        <div class="input-group">
-          <label><i class="fa-solid fa-phone"></i> Phone <span style="color: red;">*</span></label>
-          <input type="tel" name="phone" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit number" required>
-          <small class="error-msg">Please enter a valid 10-digit number</small>
-        </div>
+       <!-- Phone Field -->
+<div class="input-group">
+    <label><i class="fa-solid fa-phone"></i> Phone <span style="color: red;">*</span></label>
+
+    <div style="display: flex; gap: 8px;">
+        <select name="country_code" id="country_code" required style="width: 40%; padding: 7px;">
+            <option value="+977">Nepal (+977)</option>
+            <option value="+91">India (+91)</option>
+            <option value="+975">Bhutan (+975)</option>
+            <option value="+94">Sri Lanka (+94)</option>
+            <option value="+880">Bangladesh (+880)</option>
+            <option value="+95">Myanmar (+95)</option>
+            <option value="+93">Afghanistan (+93)</option>
+            <option value="+86">China (+86)</option>
+        </select>
+
+        <input type="tel" id="plain_phone" maxlength="10" pattern="[0-9]{10}" 
+               placeholder="10-digit number" required style="width: 60%;">
+    </div>
+
+    <!-- HIDDEN FIELD THAT WILL STORE +CODE + NUMBER -->
+    <input type="hidden" name="phone" id="phone">
+
+    <small class="error-msg">Please enter a valid 10-digit number</small>
+</div>
+
 
         <!-- Email Field - NOW OPTIONAL -->
         <div class="input-group">
@@ -96,7 +148,6 @@
             <option value="SriLanka">SriLanka</option>
             <option value="Bangladesh">Bangladesh</option>
             <option value="Myanmar">Myanmar</option>
-            
             <option value="Afganistan">Afganistan</option>
             <option value="China">China</option>
           </select>
@@ -126,215 +177,196 @@
   </div>
 
   <script>
-    document.getElementById('mlmForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Reset all error messages
-        document.querySelectorAll('.error-msg').forEach(msg => {
-            msg.style.display = 'none';
-        });
-        
-        // Validate required fields
-        let isValid = true;
-        const requiredFields = this.querySelectorAll('[required]');
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                field.nextElementSibling.style.display = 'block';
-                field.style.borderColor = '#e74c3c';
-                isValid = false;
-            } else {
-                field.style.borderColor = '#e1e5ee';
-            }
-        });
+document.getElementById('mlmForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        // Validate passwords match
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-        
-        if (password !== confirmPassword) {
-            document.getElementById('confirm_error').style.display = 'block';
-            document.getElementById('confirm_password').style.borderColor = '#e74c3c';
+    // -------------------------------------------
+    // ⭐ ADDING COUNTRY CODE + PHONE MERGE HERE ⭐
+    // -------------------------------------------
+    let code  = document.getElementById("country_code").value;
+    let num   = document.getElementById("plain_phone").value;
+    document.getElementById("phone").value = code + num;
+    // -------------------------------------------
+
+    // Reset messages
+    document.querySelectorAll('.error-msg').forEach(msg => {
+        msg.style.display = 'none';
+    });
+
+    let isValid = true;
+
+    // FIXED REQUIRED FIELD VALIDATION
+    const requiredFields = this.querySelectorAll(
+        '.input-group input[required], .input-group select[required]'
+    );
+
+    requiredFields.forEach(field => {
+        const errorMsg = field.parentElement.querySelector('.error-msg');
+
+        if (!field.value.trim()) {
+            if (errorMsg) errorMsg.style.display = 'block';
+            field.classList.add("error");
             isValid = false;
         } else {
-            document.getElementById('confirm_password').style.borderColor = '#e1e5ee';
+            if (errorMsg) errorMsg.style.display = 'none';
+            field.classList.remove("error");
         }
+    });
 
-        // Validate referred ID (now mandatory)
-        const refId = document.getElementById('ref_id').value;
-        if (refId) {
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
-            submitBtn.disabled = true;
+    // Password match check
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
 
-            validateReferral(refId).then(result => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
+    if (password !== confirmPassword) {
+        document.getElementById('confirm_error').style.display = 'block';
+        document.getElementById('confirm_password').style.borderColor = '#e74c3c';
+        isValid = false;
+    }
 
-                if (result.valid) {
-                    // Submit form if referral is valid and all other validations pass
-                    if (isValid) {
-                        this.submit();
-                    }
-                } else {
-                    document.getElementById('ref_error').textContent = result.message;
-                    document.getElementById('ref_error').style.display = 'block';
-                    document.getElementById('ref_id').style.borderColor = '#e74c3c';
-                }
-            }).catch(error => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                document.getElementById('ref_error').textContent = 'Error validating referral';
-                document.getElementById('ref_error').style.display = 'block';
-            });
+    // Referral ID check
+    const refId = document.getElementById('ref_id').value.trim();
+
+    if (!refId) {
+        document.getElementById('ref_error').textContent = 'Referral ID is required';
+        document.getElementById('ref_error').style.display = 'block';
+        document.getElementById('ref_id').style.borderColor = '#e74c3c';
+        return;
+    }
+
+    // Validate referral
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
+    submitBtn.disabled = true;
+
+    validateReferral(refId).then(result => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+
+        if (result.valid) {
+            if (isValid) this.submit();
         } else {
-            // Referral ID is now required - show error
-            document.getElementById('ref_error').textContent = 'Referral ID is required';
+            document.getElementById('ref_error').textContent = result.message;
             document.getElementById('ref_error').style.display = 'block';
             document.getElementById('ref_id').style.borderColor = '#e74c3c';
         }
     });
+});
 
-    // Password strength indicator
-    document.getElementById('password').addEventListener('input', function() {
-        const password = this.value;
-        const strengthText = document.getElementById('passwordStrength');
-        
-        if (password.length === 0) {
-            strengthText.textContent = '';
-            return;
-        }
-        
-        let strength = '';
-        if (password.length < 6) {
-            strength = 'Weak';
-            strengthText.className = 'password-strength strength-weak';
-        } else if (password.length < 8) {
-            strength = 'Medium';
-            strengthText.className = 'password-strength strength-medium';
-        } else {
-            // Check for strong password (mix of characters)
-            const hasUpperCase = /[A-Z]/.test(password);
-            const hasLowerCase = /[a-z]/.test(password);
-            const hasNumbers = /\d/.test(password);
-            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-            
-            if (hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar) {
-                strength = 'Very Strong';
-                strengthText.className = 'password-strength strength-strong';
-            } else {
-                strength = 'Strong';
-                strengthText.className = 'password-strength strength-strong';
-            }
-        }
-        
-        strengthText.textContent = `Password strength: ${strength}`;
-    });
-
-    // Validate referral ID via AJAX
-    function validateReferral(refId) {
-        return fetch('check_referral.php?ref_id=' + encodeURIComponent(refId))
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => data)
-            .catch(error => {
-                console.error('Error:', error);
-                return { valid: false, message: 'Error validating referral' };
-            });
-    }
-
-    // Real-time referral validation
-    document.getElementById('ref_id').addEventListener('blur', function() {
-        const refId = this.value.trim();
-        const refError = document.getElementById('ref_error');
-        
-        if (refId) {
-            // Show loading indicator
-            this.style.borderColor = '#ffc107';
-            
-            validateReferral(refId).then(result => {
-                if (!result.valid) {
-                    refError.textContent = result.message;
-                    refError.style.display = 'block';
-                    this.style.borderColor = '#e74c3c';
-                    
-                    // Remove success status if exists
-                    const statusDiv = document.getElementById('referralStatus');
-                    if (statusDiv) {
-                        statusDiv.remove();
-                    }
-                } else {
-                    refError.style.display = 'none';
-                    this.style.borderColor = '#27ae60';
-                    
-                    // Show success message
-                    let statusDiv = document.getElementById('referralStatus');
-                    if (!statusDiv) {
-                        statusDiv = document.createElement('div');
-                        statusDiv.id = 'referralStatus';
-                        statusDiv.style.padding = '8px';
-                        statusDiv.style.borderRadius = '5px';
-                        statusDiv.style.marginTop = '5px';
-                        statusDiv.style.fontSize = '12px';
-                        this.parentNode.appendChild(statusDiv);
-                    }
-                    
-                  if (result.status === 'prime') {
-    statusDiv.innerHTML = 
-        `✅ <strong>${result.referrer_name}</strong> is a Prime Member – Can refer unlimited members`;
-    statusDiv.style.backgroundColor = '#d4edda';
-    statusDiv.style.color = '#155724';
-    statusDiv.style.border = '1px solid #c3e6cb';
-
-} else if (result.status === 'red') {
-    statusDiv.innerHTML = 
-        `🟡 <strong>${result.referrer_name}</strong> is a Red Member – ${result.days_remaining} days remaining in grace period`;
-    statusDiv.style.backgroundColor = '#fff3cd';
-    statusDiv.style.color = '#856404';
-    statusDiv.style.border = '1px solid #ffeaa7';
-}
-
-                }
-            });
-        } else {
-            refError.textContent = 'Referral ID is required';
-            refError.style.display = 'block';
-            this.style.borderColor = '#e74c3c';
-            const statusDiv = document.getElementById('referralStatus');
-            if (statusDiv) {
-                statusDiv.remove();
-            }
-        }
-    });
-
-    // Real-time validation for required fields
-    document.querySelectorAll('#mlmForm [required]').forEach(field => {
+// REAL-TIME FIELD VALIDATION FIXED
+document.querySelectorAll('.input-group input[required], .input-group select[required]')
+    .forEach(field => {
         field.addEventListener('blur', function() {
+            const errorMsg = this.parentElement.querySelector('.error-msg');
+
             if (!this.value.trim()) {
-                this.nextElementSibling.style.display = 'block';
-                this.style.borderColor = '#e74c3c';
+                if (errorMsg) errorMsg.style.display = 'block';
+                this.classList.add("error");
             } else {
-                this.nextElementSibling.style.display = 'none';
-                this.style.borderColor = '#e1e5ee';
+                if (errorMsg) errorMsg.style.display = 'none';
+                this.classList.remove("error");
             }
         });
     });
 
-    // Remove required validation for email field
-    document.querySelector('input[name="email"]').addEventListener('blur', function() {
-        if (this.value.trim() && !this.validity.valid) {
-            this.nextElementSibling.style.display = 'block';
-            this.style.borderColor = '#e74c3c';
+// Password strength meter
+document.getElementById('password').addEventListener('input', function() {
+    const password = this.value;
+    const strengthText = document.getElementById('passwordStrength');
+
+    if (password.length === 0) {
+        strengthText.textContent = '';
+        return;
+    }
+
+    let strength = '';
+    if (password.length < 6) {
+        strength = 'Weak';
+        strengthText.className = 'password-strength strength-weak';
+    } else if (password.length < 8) {
+        strength = 'Medium';
+        strengthText.className = 'password-strength strength-medium';
+    } else {
+        const upper = /[A-Z]/.test(password);
+        const lower = /[a-z]/.test(password);
+        const num = /\d/.test(password);
+        const special = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (upper && lower && num && special) {
+            strength = 'Very Strong';
         } else {
-            this.nextElementSibling.style.display = 'none';
-            this.style.borderColor = '#e1e5ee';
+            strength = 'Strong';
+        }
+
+        strengthText.className = 'password-strength strength-strong';
+    }
+
+    strengthText.textContent = `Password strength: ${strength}`;
+});
+
+// Referral ID live check
+document.getElementById('ref_id').addEventListener('blur', function() {
+    const refId = this.value.trim();
+    const refError = document.getElementById('ref_error');
+
+    if (!refId) {
+        refError.textContent = 'Referral ID is required';
+        refError.style.display = 'block';
+        this.style.borderColor = '#e74c3c';
+        return;
+    }
+
+    this.style.borderColor = '#ffc107';
+
+    validateReferral(refId).then(result => {
+        if (!result.valid) {
+            refError.textContent = result.message;
+            refError.style.display = 'block';
+            this.style.borderColor = '#e74c3c';
+
+            const statusDiv = document.getElementById('referralStatus');
+            if (statusDiv) statusDiv.remove();
+
+        } else {
+            refError.style.display = 'none';
+            this.style.borderColor = '#27ae60';
+
+            let statusDiv = document.getElementById('referralStatus');
+            if (!statusDiv) {
+                statusDiv = document.createElement('div');
+                statusDiv.id = 'referralStatus';
+                statusDiv.style.padding = '8px';
+                statusDiv.style.borderRadius = '5px';
+                statusDiv.style.marginTop = '5px';
+                statusDiv.style.fontSize = '12px';
+                this.parentNode.appendChild(statusDiv);
+            }
+
+            if (result.status === 'prime') {
+                statusDiv.innerHTML = `✅ <strong>${result.referrer_name}</strong> is a Prime Member – Can refer unlimited members`;
+                statusDiv.style.background = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.style.border = '1px solid #c3e6cb';
+
+            } else if (result.status === 'red') {
+                statusDiv.innerHTML = `🟡 <strong>${result.referrer_name}</strong> is a Red Member – ${result.days_remaining} days remaining`;
+                statusDiv.style.background = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.style.border = '1px solid #ffeaa7';
+            }
         }
     });
-  </script>
+});
+
+// AJAX referral check
+function validateReferral(refId) {
+    return fetch('check_referral.php?ref_id=' + encodeURIComponent(refId))
+        .then(r => r.json())
+        .catch(() => ({ valid: false, message: 'Error validating referral' }));
+}
+</script>
+
+
 </body>
 </html>

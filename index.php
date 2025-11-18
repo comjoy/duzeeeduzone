@@ -340,11 +340,11 @@ To create a transparent, rewarding, and growth-driven community where every memb
                       <i class="lni lni-phone"></i>
                     </div>
                     <div class="text">     
-                      <p>09779811805734</p>
-                      <p>09779847211939</p>
-                      <p>09779861049954</p>
-                      <p>09779842291520</p>
-                      <p>09779807195772</p>
+                      <p>0977 9811805734</p>
+                      <p>0977 9812380763</p> 
+                      <p>0977 9861049954</p>
+                      <p>0977 9812350254</p>
+                      <p>0977 9807195772</p>
                     </div>
                   </div>
                 </div>
@@ -354,8 +354,7 @@ To create a transparent, rewarding, and growth-driven community where every memb
                       <i class="lni lni-envelope"></i>
                     </div>
                     <div class="text">
-                      <p>chiranjibidhakal501@gmail.com</p>
-                      <p>pahalmanlimbu718@gmail.com</p>
+                      <p>info@dujeeeduzonenepal.org</p>
                     </div>
                   </div>
                 </div>

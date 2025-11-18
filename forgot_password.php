@@ -1,6 +1,11 @@
 <?php
-require 'db.php';
 session_start();
+if (!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true) {
+    header("Location: admin_login.php");
+    exit;
+}
+
+require 'db.php';
 
 $msg = "";
 $show_reset_form = false;
@@ -145,7 +150,7 @@ a:hover{
     <?php endif; ?>
 
     <div class="text-center mt-4">
-        <a href="user_login.php">⬅ Back to Login</a>
+        <a href="admin_main.php">⬅ Back to Dashboard</a>
     </div>
 
 </div>

@@ -128,9 +128,6 @@ a:hover{
         <a href="index.php">⬅ Back to Home</a><br>
         <a href="registration_users.php" class="mt-2 d-inline-block">➕ New User? Register Now</a>
     </div>
-<div class="text-center mt-3">
-    <a href="forgot_password.php">Forgot Password?</a>
-</div>
 
 </div>
 

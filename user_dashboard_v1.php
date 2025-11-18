@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 if(!isset($_SESSION['member_loggedin'])){
     header("Location: user_login.php");
@@ -29,37 +29,7 @@ if (!empty($member['ref_id'])) {
         $ref_mlm  = $refData['mlm_id'];
     }
 }
-
-/* =============================
-      NEW CALCULATIONS ADDED
-   ============================= */
-
-// ---------- 1. Direct Joinings ---------- //
-$stmt3 = $mysqli->prepare("SELECT COUNT(*) AS direct FROM members WHERE ref_id=?");
-$stmt3->bind_param("s", $member['mlm_id']);
-$stmt3->execute();
-$direct_join = $stmt3->get_result()->fetch_assoc()['direct'];
-
-// ---------- 2. Total Joinings (Infinite Level) ---------- //
-function countDownline($mysqli, $mlm_id) {
-    $stmt = $mysqli->prepare("SELECT mlm_id FROM members WHERE ref_id=?");
-    $stmt->bind_param("s", $mlm_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $count = 0;
-
-    while ($row = $result->fetch_assoc()) {
-        $count++; // count this child
-        $count += countDownline($mysqli, $row['mlm_id']); // recursive count deeper levels
-    }
-
-    return $count;
-}
-
-$total_joinings = countDownline($mysqli, $member['mlm_id']);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -232,21 +202,11 @@ body {
             <strong><?= $ref_name ?> (<?= $ref_mlm ?>)</strong>
         </div>
 
-        <div class="info-box">
-    <span class="info-label">Direct Joinings</span>
-    <strong><?= $direct_join ?></strong>
-</div>
-
-<div class="info-box">
-    <span class="info-label">Total Joinings (All Levels)</span>
-    <strong><?= $total_joinings ?></strong>
-</div>
-
     </div>
 
     <div class="buttons">
         <a href="update_profile.php" class="btn-edit">✏ Edit Profile</a>
-        <a href="bank.php" class="btn-edit">Bank Details </a>
+        <a href="#" class="btn-edit">Bank Details </a>
          <a href="view_children.php" class="btn-edit"> View Downline</a>
         <a href="user_logout.php" class="btn-logout">🚪 Logout</a>
     </div>
